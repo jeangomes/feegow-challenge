@@ -5,10 +5,10 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
+                    <div class="card-header">Feegow Challenge</div>
 
                     <div class="card-body">
-                        <main-component></main-component>
+                        <main-component :specialties="{{$specialties}}"></main-component>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ApiFeegow;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        $feegow = new ApiFeegow();
+        return view('welcome', ['specialties' => $feegow->getSpecialties()]);
     }
 }
