@@ -10,6 +10,7 @@ class ApiFeegow
     private string $url;
     private string $token;
     private const GET_SPECIALTIES = '/specialties/list';
+    private const GET_PROFESSIONALS = '/professional/list';
 
     public function __construct()
     {
@@ -23,5 +24,20 @@ class ApiFeegow
             'x-access-token' => $this->token
         ])->get($this->url . self::GET_SPECIALTIES);
         return $response->body();
+    }
+
+    public function getProfessionalsBySpecialty($specialty_id)
+    {
+        $response = Http::withHeaders([
+            'x-access-token' => $this->token
+        ])->get($this->url . self::GET_PROFESSIONALS, [
+            'ativo' => true,
+            'especialidade_id' => $specialty_id,
+        ]);
+        $response = $response->json();
+        if ($response['success']) {
+            return $response['content'];
+        }
+        abort(400, 'Ocorreu alguma falha no retorno da api, tente novamente em outro momento!');
     }
 }
