@@ -18,4 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/professionals/{specialty_id}', App\Http\Controllers\ProfessionalController::class);
+Route::get('professionals/{specialty_id}', App\Http\Controllers\ProfessionalController::class);
+Route::get('sources', App\Http\Controllers\SourcesController::class);
+Route::post('solicitations', [\App\Http\Controllers\SolicitationController::class, 'store']);
