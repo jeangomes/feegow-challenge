@@ -1,9 +1,10 @@
 <template>
     <div>
+        <p>Selecione uma especialidade para consultar os profissionais disponíveis.</p>
         <div class="row">
             <div class="col-md-8">
-                <select class="form-select" v-model="specialty_id">
-                    <option value="">-- selecione a especialidade --</option>
+                <select required class="form-select" v-model="specialty_id">
+                    <option value="0">-- selecione a especialidade --</option>
                     <option v-for="option in specialties.content" v-bind:value="option.especialidade_id">
                         {{ option.nome }}
                     </option>
@@ -57,13 +58,16 @@ export default {
     },
     methods: {
         getProfessionalList() {
+            this.formVisible = false
             this.professionals = []
             // ajax para rota api do laravel que vai consultar e retornar os dados da feegow
-            axios.get('/api/professionals/' + this.specialty_id)
-                .then(response => (this.professionals = response.data))
-                .catch(e => {
-                    this.errors.push(e)
-                })
+            if (this.specialty_id > 0) {
+                axios.get('/api/professionals/' + this.specialty_id)
+                    .then(response => (this.professionals = response.data))
+                    .catch(e => {
+                        this.errors.push(e)
+                    })
+            }
         },
         showForm(professional_id) {
             this.professional_id = professional_id
