@@ -7,7 +7,7 @@
         <div class="col-md-6">
             <label for="inputHowMeet" class="form-label">Como conheceu?</label>
             <select id="inputHowMeet" class="form-select" required v-model="myData.source_id">
-                <option selected>selecione ...</option>
+                <option value="">selecione ...</option>
                 <option v-for="source in sources" v-bind:value="source.origem_id">
                     {{ source.nome_origem }}
                 </option>
@@ -22,7 +22,7 @@
             <input type="text" v-mask="'###.###.###-##'" class="form-control" id="inputCPF" required v-model="myData.cpf">
         </div>
         <div class="col-12">
-            <button type="submit" class="btn btn-primary">Solicitar horários {{professional_id}}</button>
+            <button type="submit" class="btn btn-primary">Solicitar horários</button>
         </div>
         <div class="col-12" v-if="wasCreated">
             <div class="alert alert-success" role="alert">
@@ -31,8 +31,13 @@
         </div>
         <div class="col-12" v-if="hasError">
             <div class="alert alert-warning" role="alert">
-                Operação não realizada com sucesso!
+                Operação não realizada!
             </div>
+            <ul class="list-group" v-if="errors">
+                <li v-for="error in errors" class="list-group-item list-group-item-danger">
+                    {{error[0]}}
+                </li>
+            </ul>
         </div>
     </form>
 </template>
@@ -47,6 +52,7 @@ export default {
             loading: false,
             wasCreated: false,
             hasError: false,
+            errors: [],
             sources: [{origem_id: '', nome_origem: ''}],
             myData: {
                 specialty_id: '',
@@ -78,7 +84,10 @@ export default {
             })
     },
     methods: {
-        postData() {
+        postData(e) {
+            e.preventDefault()
+            this.hasError = false;
+            this.wasCreated = false;
             this.loading = true;
             axios.post('/api/solicitations', this.myData)
                 .then(response => {
@@ -88,6 +97,7 @@ export default {
                     }
                 })
                 .catch(e => {
+                    this.errors = ('errors' in e.response.data) ? e.response.data.errors : [e.response.data.message];
                     this.hasError = true;
                 })
                 .finally(() => this.loading = false)
