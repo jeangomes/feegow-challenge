@@ -32,4 +32,11 @@ class StoreSolicitationRequest extends FormRequest
             'birthdate' => ['required', 'date'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'cpf.cpf_cnpj' => 'CPF inválido',
+        ];
+    }
 }
